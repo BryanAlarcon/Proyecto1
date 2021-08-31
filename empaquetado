@@ -1,0 +1,58 @@
+library ieee;
+use ieee.std_logic_1164.all;
+use work.archivo_componentes.all;
+
+entity empaquetado is 
+    Port(clock,reset,encender,delicado,normal,jeans,toallas,start,remojar: in std_logic;
+	      POT: in std_logic_vector(7 downto 0);
+	      MOTORI,MOTORD,centrifugar,bomba,valvula,pulse: out std_logic);
+end empaquetado;
+
+architecture solucion of empaquetado is
+		signal seleccion,selectora:std_logic_vector(1 downto 0);
+		signal EnableConv,ResentCon1,ResentCon2,ResentCon3,igual15,igual1,MinutoCom,Selremojar,SosRemojar:std_logic;
+		signal EnableMin,EnRemojar,igual30,opcion,IgualLavado,IgualExprimido,IgualEnjuague,IgualExprimido2,IgualEnjuague2,IgualExprimidoF:std_logic;
+		signal sesentaseg:std_logic_vector(5 downto 0);
+		signal Minuto,salida1,salida2,salida3,salida4,salida5,salida6:std_logic_vector(4 downto 0);
+		signal quinceseg:std_logic_vector(3 downto 0);
+		begin 
+				controlador: mss Port map(clock,reset,encender,delicado,normal,toallas,jeans,remojar,start,SosRemojar,IgualLavado,IgualExprimido,IgualEnjuague,
+								IgualExprimido2,IgualEnjuague2,IgualExprimidoF,MinutoCom,Igual1,Igual30,Igual15,MOTORD,MOTORI,centrifugar,bomba,valvula,selRemojar,
+								EnRemojar,ResentCon1,ResentCon2,ResentCon3,EnableMin,EnableConv);
+								
+				encoder1: decoder_de_4_a_2 Port map (delicado,normal,jeans,toallas,seleccion);
+				registro1: registro_sostenimiento2 Port map(clock,'1',EnableConv,seleccion,selectora);
+
+
+				contador1: contador60 Port map(clock,ResentCon1,'0',clock,"000000",sesentaseg);
+				comparador3: Comparador6bits Port map(sesentaseg,"110000",MinutoCom);
+
+
+				contador2: contadormin Port map(clock,ResentCon3,'0',EnableMin,"00000",Minuto);
+				comparador2: Comparador5bits Port map(Minuto,"00001",igual1);
+
+				contador3: contador15 Port map(clock,ResentCon2,'0',clock,"0000",quinceseg);
+				comparador1: Comparador4bits Port map(quinceseg,"1111",igual15);
+
+
+				mux1: Mux2_1 Port map(Selremojar,'0','1',opcion);
+				resgistro2: registro_sostenimiento1 Port map(clock,'1',EnRemojar,opcion,SosRemojar);
+				comparador4: Comparador5bits Port map(Minuto,"11110",igual30);
+				mux2: Mux4_1_8 Port map(selectora,"00011","01000","01100","10010",salida1);
+				comparador5: Comparador5bits Port map(Minuto,salida1,IgualLavado);
+				mux3: Mux4_1_8 Port map(selectora,"00001","00010","00011","00100",salida2);
+				comparador6: Comparador5bits Port map(Minuto,salida2,IgualExprimido);
+				mux4: Mux4_1_8 Port map(selectora,"00010","00110","01011","01101",salida3);
+				comparador7: Comparador5bits Port map(Minuto,salida3,IgualEnjuague);
+				mux5: Mux4_1_8 Port map(selectora,"00000","00010","00011","00100",salida4);
+				comparador8: Comparador5bits Port map(Minuto,salida4,IgualExprimido2);
+				mux6: Mux4_1_8 Port map(selectora,"00000","00110","01011","01101",salida5);
+				comparador9: Comparador5bits Port map(Minuto,salida5,IgualEnjuague2);
+				mux7: Mux4_1_8 Port map(selectora,"00010","00100","00011","00110",salida6);
+				comparador10: Comparador5bits Port map(Minuto,salida6,IgualExprimidoF);
+				sensor: pwm Port map(clock,POT, pulse);
+end solucion;
+
+
+
+
