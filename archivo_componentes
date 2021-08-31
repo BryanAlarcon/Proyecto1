@@ -1,0 +1,85 @@
+library ieee;
+use ieee.std_logic_1164.all;
+
+package archivo_componentes is 
+
+component Mux2_1 is
+port( Sel: in std_logic;
+		D0, D1: in std_logic;
+		Q: out std_logic);
+end component;
+
+component Mux4_1_8 is
+port( Sel: in std_logic_vector (1 downto 0);
+		D0, D1, D2, D3: in std_logic_vector (4 downto 0);
+		Q: out std_logic_vector (4 downto 0));
+end component;
+
+component Comparador4bits is
+port(A, B: in std_logic_vector(3 downto 0);
+		AigualB, AmenorB, AmayorB: out std_logic);
+end component;
+
+component Comparador5bits is
+port(A, B: in std_logic_vector(4 downto 0);
+		AigualB, AmenorB, AmayorB: out std_logic);
+end component;
+
+component Comparador6bits is
+port(A, B: in std_logic_vector(5 downto 0);
+		AigualB, AmenorB, AmayorB: out std_logic);
+end component;
+
+component decoder_de_4_a_2 is
+  port ( A, B, C, D : in std_logic;              -- Defines ports
+         Q : out std_logic_vector(1 downto 0));
+end component;
+
+component registro_sostenimiento2 IS
+	PORT(clock,reset,enable: IN STD_LOGIC;
+		 Ent : IN STD_LOGIC_VECTOR(1 downto 0);
+		 Q : OUT STD_LOGIC_VECTOR (1 downto 0));
+END component;
+
+component registro_sostenimiento1 IS
+	PORT(clock,reset,enable: IN STD_LOGIC;
+		 Ent : IN STD_LOGIC;
+		 Q : OUT STD_LOGIC);
+END component;
+
+
+component pwm is 
+	port(
+		clck: in std_logic;
+		val_cur: in std_logic_vector(7 downto 0);
+		pulse: out std_logic
+		);
+end component;
+
+component contador60 is
+port (clock, resetn, Ld, En: in std_logic;
+		Ent: in std_logic_vector(5 downto 0);
+		Q: out std_logic_vector(5 downto 0));
+end component;
+
+
+component contadormin is
+port (clock, resetn, Ld, En: in std_logic;
+		Ent: in std_logic_vector(4 downto 0);
+		Q: out std_logic_vector(4 downto 0));
+end component;
+
+
+component contador15 is
+port (clock, resetn, Ld, En: in std_logic;
+		Ent: in std_logic_vector(3 downto 0);
+		Q: out std_logic_vector(3 downto 0));
+end component;
+
+component mss is 
+       port(clock,reset,encender,delicado,normal,toallas,jeans,remojar,start,SosRemojar,IgualLavado,IgualExprimido,IgualEnjuague,
+		      IgualExprimido2,IgualEnjuague2,IgualExprimidoF,MinutoCom,Igual1,Igual30,Igual15: in std_logic;
+				MOTORD,MOTORI,centrifugar,bomba,valvula,selRemojar,EnRemojar,ResentCon1,ResentCon2,ResentCon3,EnableMin,EnableConv: out std_logic);
+end component;
+
+end archivo_componentes;
