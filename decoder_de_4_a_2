@@ -1,0 +1,22 @@
+library ieee;                                    -- Defines std_logic types
+use ieee.std_logic_1164.all;
+
+entity decoder_de_4_a_2 is
+  port ( A, B, C, D : in std_logic;              -- Defines ports
+         Q : out std_logic_vector(1 downto 0));
+end decoder_de_4_a_2;
+
+architecture comportamiento of decoder_de_4_a_2 is
+  signal IN_DATA : std_logic_vector(3 downto 0); -- Defines internal signals
+begin
+  IN_DATA <= D & C & B & A;                      -- Binding vector
+  process( IN_DATA ) begin
+    case IN_DATA is                              -- Decode with input data
+      when "0001" => Q <= "00";
+      when "0010" => Q <= "01";
+      when "0100" => Q <= "11";
+      when "1000" => Q <= "10";
+      when others => Q <= "XX";    -- Illegal condition
+    end case;
+  end process;
+end comportamiento;
